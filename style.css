@@ -48,7 +48,7 @@ body{
     transform: none(1.1);
 }
 
-.signup, .login{
+.login, .signup{
     padding: 10px 16px;
     font-size: 18px;
     cursor: pointer;
@@ -56,24 +56,25 @@ body{
     transition: 0.2s ease;
 }
 
-.signup{
+.login{
     color: #FFFFFF;
     border: 2px solid #FFFFFF;
     border-radius: 8px;
     border-color: transparent;
 }
 
-.login{
+.signup{
     background-color: #FFFFFF;
     color: rgb(0, 0, 0);
     border: 2px solid #FFFFFF;
     border-radius: 8px;
 }
 
-.signup:hover{
+.login:hover{
     color: #e1e1e1;
+    border-color: #1f1f1f;
 }
 
-.login:hover{
+.signup:hover{
     background-color: #e1e1e1;
 }
