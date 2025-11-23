@@ -1,5 +1,5 @@
 body{
-    background-color: #E6E6E6;
+    background-color: #161616;
 }
 
 
@@ -18,7 +18,7 @@ body{
     font-size:36px;
     font-weight: 400;
     margin: 0;
-    color: #000000;
+    color: #FFFFFF;
 }
 
 #Actions {
@@ -39,17 +39,13 @@ body{
 }
 
 #icon-button svg {
-    stroke: #000000;
+    stroke: #FFFFFF;
     transition: 0.2s ease;
 }
 
 #icon-button:hover {
-    background-color: #e0e0e0;
-    transform:none(1.1);
-}
-
-#icon-button:hover svg {
-    stroke:#575757;
+    background-color: #1f1f1f;
+    transform: none(1.1);
 }
 
 .signup, .login{
@@ -61,15 +57,23 @@ body{
 }
 
 .signup{
-    color: #000000;
-    border: 2px solid #000000;
+    color: #FFFFFF;
+    border: 2px solid #FFFFFF;
     border-radius: 8px;
     border-color: transparent;
 }
 
 .login{
-    background-color: #000000;
-    color: white;
-    border: 2px solid #000000;
+    background-color: #FFFFFF;
+    color: rgb(0, 0, 0);
+    border: 2px solid #FFFFFF;
     border-radius: 8px;
+}
+
+.signup:hover{
+    color: #e1e1e1;
+}
+
+.login:hover{
+    background-color: #e1e1e1;
 }
