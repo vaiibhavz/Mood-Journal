@@ -1,4 +1,3 @@
-// Mood selection handling
 document.addEventListener('DOMContentLoaded', function() {
     const moodRadios = document.querySelectorAll('.mood-radio');
     const journalText = document.getElementById('journal-text');
@@ -6,15 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const saveButton = document.querySelector('.controls .save');
     const refreshButton = document.querySelector('.refresh-button');
 
-    // Reset functionality
     resetButton.addEventListener('click', function() {
-        // Reset mood selection
         moodRadios.forEach(radio => {
             radio.checked = false;
         });
-        // Set default to Normal
-        document.getElementById('mood-normal').checked = true;
-        // Clear textarea
         if (journalText) {
             if (journalText.tagName === 'TEXTAREA') {
                 journalText.value = '';
@@ -22,9 +16,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 journalText.innerHTML = '';
             }
         }
+        
+        if (journalText && journalText.contentEditable === 'true') {
+            const toolbarButtons = document.querySelectorAll('.toolbar .tool[data-command]');
+            toolbarButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+        }
     });
 
-    // Save functionality (placeholder)
     saveButton.addEventListener('click', function() {
         const selectedMood = document.querySelector('input[name="mood"]:checked');
         let text = '';
@@ -41,14 +41,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 mood: selectedMood.value,
                 text: text
             });
-            // Add your save logic here
             alert('Entry saved!');
         } else {
             alert('Please select a mood and write something.');
         }
     });
 
-    // Refresh button functionality
     refreshButton.addEventListener('click', function() {
         if (journalText) {
             if (journalText.tagName === 'TEXTAREA') {
@@ -59,14 +57,38 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Rich text editor functionality
     if (journalText && journalText.contentEditable === 'true') {
         const toolbarButtons = document.querySelectorAll('.toolbar .tool[data-command]');
+        const listButton = document.querySelector('.toolbar .tool[data-command="insertUnorderedList"]');
         
-        // Update button states based on current formatting
+        function isSelectionInEditor() {
+            const selection = window.getSelection();
+            if (!selection || selection.rangeCount === 0) {
+                return false;
+            }
+            
+            const range = selection.getRangeAt(0);
+            return journalText.contains(range.commonAncestorContainer) || journalText === range.commonAncestorContainer;
+        }
+        
         function updateButtonStates() {
+            if (!isSelectionInEditor() && document.activeElement !== journalText) {
+                toolbarButtons.forEach(button => {
+                    button.classList.remove('active');
+                });
+                if (listButton) {
+                    listButton.classList.remove('active');
+                }
+                return;
+            }
+            
             toolbarButtons.forEach(button => {
                 const command = button.getAttribute('data-command');
+                
+                if (command === 'insertUnorderedList') {
+                    return;
+                }
+                
                 try {
                     if (document.queryCommandState(command)) {
                         button.classList.add('active');
@@ -74,52 +96,107 @@ document.addEventListener('DOMContentLoaded', function() {
                         button.classList.remove('active');
                     }
                 } catch (e) {
-                    // Command not supported
+                    button.classList.remove('active');
                 }
             });
+            
+            if (listButton) {
+                try {
+                    const selection = window.getSelection();
+                    if (selection.rangeCount > 0) {
+                        const range = selection.getRangeAt(0);
+                        let node = range.commonAncestorContainer;
+                        
+                        while (node && node !== journalText) {
+                            if (node.nodeType === 1) {
+                                if (node.tagName === 'UL' || node.tagName === 'LI') {
+                                    listButton.classList.add('active');
+                                    return;
+                                }
+                            }
+                            node = node.parentNode;
+                        }
+                    }
+                    listButton.classList.remove('active');
+                } catch (e) {
+                    try {
+                        if (document.queryCommandState('insertUnorderedList')) {
+                            listButton.classList.add('active');
+                        } else {
+                            listButton.classList.remove('active');
+                        }
+                    } catch (e2) {
+                        listButton.classList.remove('active');
+                    }
+                }
+            }
         }
 
-        // Update states on selection change
         journalText.addEventListener('input', updateButtonStates);
         journalText.addEventListener('keyup', updateButtonStates);
         journalText.addEventListener('mouseup', updateButtonStates);
-        document.addEventListener('selectionchange', updateButtonStates);
+        journalText.addEventListener('focus', updateButtonStates);
+        journalText.addEventListener('blur', function() {
+            toolbarButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+            if (listButton) {
+                listButton.classList.remove('active');
+            }
+        });
+        
+        document.addEventListener('selectionchange', function() {
+            if (isSelectionInEditor() || document.activeElement === journalText) {
+                updateButtonStates();
+            } else {
+                toolbarButtons.forEach(button => {
+                    button.classList.remove('active');
+                });
+                if (listButton) {
+                    listButton.classList.remove('active');
+                }
+            }
+        });
 
-        // Toolbar button click handlers
         toolbarButtons.forEach(button => {
+            const command = button.getAttribute('data-command');
+            
+            if (command === 'insertUnorderedList') {
+                return;
+            }
+            
             button.addEventListener('click', function(e) {
                 e.preventDefault();
-                const command = this.getAttribute('data-command');
+                const cmd = this.getAttribute('data-command');
                 
-                if (!command) return;
+                if (!cmd) return;
                 
-                // Focus the editor
                 journalText.focus();
                 
-                // Execute the formatting command
                 try {
-                    document.execCommand(command, false, null);
+                    document.execCommand(cmd, false, null);
                 } catch (e) {
-                    console.error('Command failed:', command, e);
+                    console.error('Command failed:', cmd, e);
                 }
                 
-                // Update button states
-                updateButtonStates();
+                setTimeout(updateButtonStates, 10);
             });
         });
 
-        // Handle list command specially
-        const listButton = document.querySelector('.toolbar .tool[data-command="insertUnorderedList"]');
         if (listButton) {
             listButton.addEventListener('click', function(e) {
                 e.preventDefault();
+                e.stopPropagation();
+                
                 journalText.focus();
+                
                 try {
                     document.execCommand('insertUnorderedList', false, null);
                 } catch (e) {
                     console.error('List command failed:', e);
                 }
-                updateButtonStates();
+                
+                setTimeout(updateButtonStates, 10);
             });
         }
     }

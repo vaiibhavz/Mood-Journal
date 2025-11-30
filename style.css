@@ -1,28 +1,21 @@
-/* -------------------------
-   Palette & variables
-   ------------------------- */
 :root{
   --black: #161616;
-  --grey-1: #242424; /* card bg */
-  --grey-2: #313131; /* inner panel */
-  --grey-3: #373737; /* toolbar / accents */
+  --grey-1: #242424;
+  --grey-2: #313131;
+  --grey-3: #373737;
   --grey-4: #737373;
   --grey-5: #AAAAAA;
   --grey-6: #999999;
   --grey-7: #EDEDED;
   --white: #ffffff;
-
-  --card-width: 620px; /* Reduced from 680px */
-  --card-padding: 36px; /* Keep inner padding */
+  --card-width: 620px;
+  --card-padding: 36px;
   --radius-lg: 16px;
   --radius-sm: 8px;
   --gap: 18px;
   --ui-font: "Arial", sans-serif;
 }
 
-/* -------------------------
-   Global
-   ------------------------- */
 * { box-sizing: border-box; }
 
 html,body{
@@ -37,9 +30,6 @@ html,body{
   font-size:16px;
 }
 
-/* -------------------------
-   Header
-   ------------------------- */
 #Header{
   width: 100%;
   max-width: calc(var(--card-width) + (var(--card-padding) * 2));
@@ -48,7 +38,7 @@ html,body{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-sizing: border-box; /* Add this */
+  box-sizing: border-box;
 }
 
 a{ text-decoration: none; color: inherit; }
@@ -127,22 +117,18 @@ a{ text-decoration: none; color: inherit; }
 }
 .login:hover:after{ width: 100%; }
 
-/* -------------------------
-   Page main / card container
-   ------------------------- */
 main.card{
   width: 100%;
   max-width: calc(var(--card-width) + (var(--card-padding) * 2));
   margin: 28px auto 120px;
   display: block;
   padding: 0 var(--card-padding);
-  box-sizing: border-box; /* Add this */
+  box-sizing: border-box;
 }
 
-/* Card block that contains everything */
 .card > .entry.header{
-  width: 100%; /* Change from var(--card-width) to 100% */
-  max-width: var(--card-width); /* Add max-width instead */
+  width: 100%;
+  max-width: var(--card-width);
   margin: 18px auto;
   background: var(--grey-1);
   padding: var(--card-padding);
@@ -150,12 +136,9 @@ main.card{
   box-shadow: none;
   color: var(--grey-7);
   position: relative;
-  box-sizing: border-box; /* Add this */
+  box-sizing: border-box;
 }
 
-/* -------------------------
-   Mood Section
-   ------------------------- */
 .mood-header {
   display: flex;
   justify-content: space-between;
@@ -170,7 +153,6 @@ main.card{
   font-size: 20px;
 }
 
-/* TODAY'S ENTRY tag - positioned at top right of card */
 .entry.header .Tag {
   position: absolute;
   top: var(--card-padding);
@@ -178,13 +160,13 @@ main.card{
   display: inline-block;
   font-size: 12px;
   padding: 8px 16px;
-  border-radius: 24px; /* Rounded corners like a button */
-  border: 1px solid rgba(255,255,255,0.12); /* Light border */
-  color: var(--white); /* White text */
-  background: var(--grey-1); /* Dark grey background */
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--white);
+  background: var(--grey-1);
   letter-spacing: 0.5px;
   font-weight: 600;
-  z-index: 10; /* Ensure it's above other content */
+  z-index: 10;
 }
 
 .mood-header .Tag {
@@ -199,9 +181,6 @@ main.card{
   font-weight: 600;
 }
 
-/* -------------------------
-   Mood list / pills
-   ------------------------- */
 .mood-list{
   width: 100%;
   background: var(--grey-2);
@@ -215,7 +194,6 @@ main.card{
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
 }
 
-/* Hide real radio inputs */
 .mood-radio {
   position: absolute;
   opacity: 0;
@@ -224,7 +202,6 @@ main.card{
   height: 0;
 }
 
-/* each mood label */
 .mood-label{
   display: flex;
   flex-direction: column;
@@ -242,7 +219,6 @@ main.card{
   background: transparent;
 }
 
-/* default small icon circle visual */
 .mood-label svg { display:block; width:32px; height:32px; }
 
 .mood-label svg[class*="selected"],
@@ -256,16 +232,14 @@ main.card{
   display: block !important;
 }
 
-/* Selected state */
 .mood-radio:checked + .mood-label{
-  background: rgba(255,255,255,0.05); /* Solid background instead of gradient */
+  background: rgba(255,255,255,0.05);
   color: var(--white);
   border-color: rgba(255,255,255,0.06);
   transform: none;
   box-shadow: none;
 }
 
-/* swap visible svgs when checked */
 .mood-radio:checked + .mood-label svg[class*="selected"],
 .mood-radio:checked + .mood-label svg[class*="Selected"]{
   display: block !important;
@@ -282,7 +256,6 @@ main.card{
   filter: none;
 }
 
-/* label text */
 .mood-label span{
   font-size: 13px;
   font-weight: 600;
@@ -291,13 +264,9 @@ main.card{
   opacity: 0.95;
 }
 
-/* fallback: hide duplicate svgs that have no class at all */
 .mood-label svg:not([class]) { display: block; }
 .mood-radio:checked + .mood-label svg:not([class]) { display: block; }
 
-/* -------------------------
-   Write Section
-   ------------------------- */
 .write-section {
   margin-top: 28px;
 }
@@ -334,7 +303,6 @@ main.card{
   color: var(--white);
 }
 
-/* textarea */
 .textarea-wrap{
   margin-top: 10px;
   position: relative;
@@ -345,23 +313,24 @@ main.card{
 textarea,
 .rich-text-editor {
   width: 100%;
-  min-height: 260px;
+  min-height: 140px;
   background: var(--grey-2);
   color: var(--grey-7);
-  border-radius: 8px 8px 0 0; /* Remove bottom border radius */
+  border-radius: 8px 8px 0 0;
   border: 1px solid rgba(255,255,255,0.04);
-  border-bottom: none; /* Remove bottom border to connect with toolbar */
+  border-bottom: none;
   padding: 18px;
   font-size: 16px;
-  resize: vertical;
+  resize: none;
   box-shadow: none;
   outline: none;
   transition: border-color 0.12s ease;
   font-family: var(--ui-font);
-  margin-bottom: 0; /* Ensure no margin */
-  display: block; /* Ensure block display */
-  vertical-align: top; /* Remove any vertical alignment spacing */
-  overflow-y: auto;
+  margin-bottom: 0;
+  display: block;
+  vertical-align: top;
+  overflow-y: visible;
+  height: auto;
 }
 
 .rich-text-editor:empty:before {
@@ -379,27 +348,24 @@ textarea::placeholder {
   color: var(--grey-4);
 }
 
-/* textarea focus - removed inner shadow */
 textarea:focus{
   border-color: rgba(255,255,255,0.08);
-  box-shadow: none; /* Remove inner shadow */
+  box-shadow: none;
 }
 
-/* toolbar row (icons area) - connected to textarea */
 .toolbar{
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center; /* Center align icons */
+  justify-content: flex-start;
   gap: 12px;
   padding: 8px 12px;
-  border-radius: 0 0 8px 8px; /* Remove top border radius */
+  border-radius: 0 0 8px 8px;
   border: 1px solid rgba(255,255,255,0.04);
-  border-top: 1px solid rgba(255,255,255,0.12); /* More visible separator line */
-  background: var(--grey-2); /* Same background as textarea */
+  border-top: 1px solid rgba(255,255,255,0.12);
+  background: var(--grey-2);
 }
 
-/* icon placeholders */
 .toolbar .tool{
   display: inline-flex;
   align-items: center;
@@ -432,9 +398,6 @@ textarea:focus{
   height: 18px;
 }
 
-/* -------------------------
-   Form controls area
-   ------------------------- */
 .controls{
   display: flex;
   justify-content: flex-end;
@@ -476,7 +439,6 @@ textarea:focus{
   transform: translateY(-1px);
 }
 
-/* Container for textarea and toolbar */
 .textarea-container {
   margin-top: 10px;
   display: flex;
@@ -492,15 +454,12 @@ textarea:focus{
   margin-top: 0;
 }
 
-/* -------------------------
-   Responsiveness
-   ------------------------- */
 @media (max-width: 920px){
   :root { 
-    --card-width: min(680px, calc(100% - 48px)); /* Fix this */
+    --card-width: min(680px, calc(100% - 48px)); 
   }
   .mood-label{ 
-    width: calc((100% - 36px) / 5); /* Fix calculation */
+    width: calc((100% - 36px) / 5); 
     min-width: 72px; 
   }
 }
@@ -510,12 +469,12 @@ textarea:focus{
     --card-width: calc(100% - 48px); 
   }
   main.card {
-    padding: 0 24px; /* Add consistent padding */
+    padding: 0 24px;
   }
   .card > .entry.header{ 
     width: 100%; 
-    padding: 28px 20px; /* Adjust padding */
-    margin: 18px 0; /* Remove auto margin */
+    padding: 28px 20px; 
+    margin: 18px 0; 
   }
   .mood-list{ 
     flex-wrap: wrap; 
@@ -524,7 +483,7 @@ textarea:focus{
     padding: 14px; 
   }
   .mood-label{ 
-    width: calc(50% - 10px); /* Better calculation */
+    width: calc(50% - 10px); 
     min-width: 100px; 
   }
   textarea, .rich-text-editor{ 
@@ -541,14 +500,14 @@ textarea:focus{
     gap: 12px;
   }
   #Header {
-    padding: 20px 24px; /* Adjust header padding */
-    flex-wrap: wrap; /* Allow wrapping on small screens */
+    padding: 20px 24px;
+    flex-wrap: wrap;
   }
   #Header h1 {
-    font-size: 28px; /* Smaller on mobile */
+    font-size: 28px;
   }
   #Actions {
-    gap: 12px; /* Reduce gap */
+    gap: 12px;
   }
 }
 
@@ -569,5 +528,4 @@ textarea:focus{
   }
 }
 
-/* small visual polish */
 .mood-label svg path { transition: fill 0.12s ease, stroke 0.12s ease; }
