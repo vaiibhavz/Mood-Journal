@@ -347,7 +347,6 @@ textarea,
   font-family: var(--ui-font);
   margin-bottom: 0;
   display: block;
-  vertical-align: top;
   overflow-y: visible;
   height: auto;
 }
