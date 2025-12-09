@@ -1,45 +1,96 @@
-/* -------------------------
-   Palette & variables
-   ------------------------- */
-:root{
-  --black: #161616;
-  --grey-1: #242424;
-  --grey-2: #313131;
-  --grey-3: #373737;
-  --grey-4: #737373;
-  --grey-5: #AAAAAA;
-  --grey-6: #999999;
-  --grey-7: #EDEDED;
-  --white: #ffffff;
+:root {
+  /* Primitives - Dark */
+  --p-black: #161616;
+  --p-grey-1: #242424;
+  --p-grey-2: #313131;
+  --p-grey-3: #373737;
+  --p-grey-4: #737373;
+  --p-grey-5: #AAAAAA;
+  --p-grey-6: #999999;
+  --p-grey-7: #EDEDED;
+  --p-white: #ffffff;
+
+  /* Primitives - Light */
+  --p-light-bg: #F8F9FA;
+  --p-light-card: #FFFFFF;
+  --p-light-text: #1A1A1A;
+  --p-light-muted: #666666;
+  --p-light-border: #E5E5E5;
+  --p-light-hover: #F2F2F2;
+
+  /* Semantic - Default (Dark) */
+  --bg-body: var(--p-black);
+  --bg-card: var(--p-grey-1);
+  --bg-element: var(--p-grey-2);
+  --bg-element-hover: #3a3a3a;
+
+  --text-main: var(--p-grey-7);
+  --text-header: var(--p-white);
+  --text-muted: var(--p-grey-5);
+
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-focus: rgba(255, 255, 255, 0.1);
+
+  --btn-icon-color: var(--p-grey-5);
+  --btn-icon-hover-bg: #1f1f1f;
+
+  --btn-primary-hover: #e6e6e6;
+  /* White -> Light Grey */
+
   --card-width: 620px;
   --card-padding: 36px;
-  --radius-lg: 16px;
-  --radius-sm: 8px;
-  --gap: 18px;
-  --ui-font: "Arial", sans-serif;
+  --radius-lg: 24px;
+  /* Increased for premium feel */
+  --radius-sm: 12px;
+  --gap: 20px;
+  --ui-font: "Inter", "Segoe UI", sans-serif;
+  /* Premium font stack */
+}
+
+[data-theme="light"] {
+  --bg-body: var(--p-light-bg);
+  --bg-card: var(--p-light-card);
+  --bg-element: #F3F4F6;
+  --bg-element-hover: #E5E7EB;
+
+  --text-main: var(--p-light-text);
+  --text-header: #000000;
+  --text-muted: var(--p-light-muted);
+
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --border-focus: rgba(0, 0, 0, 0.12);
+
+  --btn-icon-color: var(--p-light-muted);
+  --btn-icon-hover-bg: rgba(0, 0, 0, 0.05);
+
+  --btn-primary-hover: #333333;
+  /* Black -> Dark Grey */
 }
 
 /* -------------------------
    Global
    ------------------------- */
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-html,body{
-  height:100%;
-  margin:0;
-  background: var(--black);
-  color: var(--grey-7);
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg-body);
+  color: var(--text-main);
   font-family: var(--ui-font);
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  line-height:1.4;
-  font-size:16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.4;
+  font-size: 16px;
 }
 
 /* -------------------------
    Header (kept from your CSS + small tweaks)
    ------------------------- */
-#Header{
+#Header {
   width: 100%;
   max-width: calc(var(--card-width) + (var(--card-padding) * 2));
   margin: 0 auto;
@@ -50,14 +101,17 @@ html,body{
   box-sizing: border-box;
 }
 
-a{ text-decoration: none; color: inherit; }
+a {
+  text-decoration: none;
+  color: inherit;
+}
 
-#Header h1{
+#Header h1 {
   font-family: "arial", sans-serif;
-  font-size:36px;
+  font-size: 36px;
   font-weight: 400;
   margin: 0;
-  color: var(--white);
+  color: var(--text-header);
 }
 
 #Actions {
@@ -76,15 +130,32 @@ a{ text-decoration: none; color: inherit; }
   align-items: center;
   justify-content: center;
   transition: transform 0.3s ease, filter 0.3s ease, background-color 0.2s ease;
-  color: var(--grey-5);
+  color: var(--btn-icon-color);
 }
+
+.icon-sun,
+.icon-moon {
+  display: none;
+}
+
+/* Default (Dark Mode) -> Show Sun */
+:root:not([data-theme="light"]) .icon-sun {
+  display: block;
+}
+
+/* Light Mode -> Show Moon */
+[data-theme="light"] .icon-moon {
+  display: block;
+}
+
 #icon-button:hover {
-  background-color: #1f1f1f;
+  background-color: var(--btn-icon-hover-bg);
   transform: rotate(6deg);
   filter: brightness(1);
 }
 
-.login, .signup{
+.login,
+.signup {
   padding: 10px 16px;
   font-size: 18px;
   cursor: pointer;
@@ -92,44 +163,49 @@ a{ text-decoration: none; color: inherit; }
   border-radius: 6px;
 }
 
-.signup{
-  background: var(--white);
-  color: var(--black);
+.signup {
+  background: var(--text-header);
+  color: var(--bg-body);
   border: 2px solid transparent;
   border-radius: 8px;
   transition: background 0.25s ease, transform 0.2s ease, opacity 0.25s ease;
 }
-.signup:hover{
-  background: #f2f2f2;
+
+.signup:hover {
+  background: var(--btn-primary-hover);
   transform: translateY(-2px);
   opacity: 0.95;
 }
 
-.login{
+.login {
   position: relative;
   display: inline-block;
-  color: var(--white);
-  border:none;
+  color: var(--text-header);
+  border: none;
   outline: none;
   transition: color 0.25s ease;
 }
-.login:after{
+
+.login:after {
   content: "";
   position: absolute;
   left: 50%;
   bottom: -2px;
   width: 0%;
   height: 1px;
-  background: var(--white);
+  background: var(--text-header);
   transition: all 0.3s ease;
   transform: translateX(-50%);
 }
-.login:hover:after{ width: 100%; }
+
+.login:hover:after {
+  width: 100%;
+}
 
 /* -------------------------
    Page main / card container
    ------------------------- */
-main.card{
+main.card {
   width: 100%;
   max-width: calc(var(--card-width) + (var(--card-padding) * 2));
   margin: 28px auto 120px;
@@ -139,11 +215,11 @@ main.card{
 }
 
 /* Card block that contains everything (header + mood UI) */
-.card > .entry.header{
+.card>.entry.header {
   width: 100%;
   max-width: var(--card-width);
   margin: 18px auto;
-  background: var(--grey-1);
+  background: var(--bg-card);
   padding: var(--card-padding);
   border-radius: var(--radius-lg);
   box-shadow: none;
@@ -161,20 +237,20 @@ main.card{
   font-size: 12px;
   padding: 8px 16px;
   border-radius: 24px;
-  border: 1px solid rgba(255,255,255,0.12);
-  color: var(--white);
-  background: var(--grey-1);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-header);
+  background: var(--bg-card);
   letter-spacing: 0.5px;
   font-weight: 600;
   z-index: 10;
 }
 
 /* section heading */
-.select-mood h2{
+.select-mood h2 {
   margin: 18px 0;
   font-weight: 500;
   color: var(--grey-7);
-  font-size:20px;
+  font-size: 20px;
 }
 
 /* -------------------------
@@ -194,9 +270,9 @@ main.card{
   font-size: 20px;
 }
 
-.mood-list{
+.mood-list {
   width: 100%;
-  background: var(--grey-2);
+  background: var(--bg-element);
   padding: 18px;
   border-radius: 10px;
   display: flex;
@@ -204,7 +280,7 @@ main.card{
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 28px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+  box-shadow: inset 0 1px 0 var(--border-subtle);
 }
 
 /* Hide real radio inputs */
@@ -217,7 +293,7 @@ main.card{
 }
 
 /* each mood label */
-.mood-label{
+.mood-label {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -225,7 +301,7 @@ main.card{
   min-width: 80px;
   text-align: center;
   cursor: pointer;
-  color: var(--grey-5);
+  color: var(--btn-icon-color);
   padding: 10px;
   border-radius: 8px;
   transition: background 0.12s ease, border-color 0.12s ease;
@@ -235,41 +311,48 @@ main.card{
 }
 
 /* default small icon circle visual */
-.mood-label svg { display:block; width:32px; height:32px; }
+.mood-label svg {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
 
 /* hide the 'selected' svg by default, show the 'unselected' */
 .mood-label svg[class*="selected"],
-.mood-label svg[class*="Selected"]{
+.mood-label svg[class*="Selected"] {
   display: none !important;
 }
+
 .mood-label svg[class*="unselect"],
 .mood-label svg[class*="Unselect"],
 .mood-label svg[class*="unselected"],
-.mood-label svg[class*="UnSelected"]{
+.mood-label svg[class*="UnSelected"] {
   display: block !important;
 }
 
 /* when the radio is checked, flip which svg shows and add highlight */
-.mood-radio:checked + .mood-label{
-  background: rgba(255,255,255,0.05);
-  color: var(--white);
-  border-color: rgba(255,255,255,0.06);
+.mood-radio:checked+.mood-label {
+  background: var(--bg-element-hover);
+  color: var(--text-header);
+  border-color: var(--border-focus);
   transform: none;
   box-shadow: none;
 }
-.mood-radio:checked + .mood-label svg[class*="selected"],
-.mood-radio:checked + .mood-label svg[class*="Selected"]{
+
+.mood-radio:checked+.mood-label svg[class*="selected"],
+.mood-radio:checked+.mood-label svg[class*="Selected"] {
   display: block !important;
 }
-.mood-radio:checked + .mood-label svg[class*="unselect"],
-.mood-radio:checked + .mood-label svg[class*="Unselect"],
-.mood-radio:checked + .mood-label svg[class*="unselected"],
-.mood-radio:checked + .mood-label svg[class*="UnSelected"]{
+
+.mood-radio:checked+.mood-label svg[class*="unselect"],
+.mood-radio:checked+.mood-label svg[class*="Unselect"],
+.mood-radio:checked+.mood-label svg[class*="unselected"],
+.mood-radio:checked+.mood-label svg[class*="UnSelected"] {
   display: none !important;
 }
 
 /* label text */
-.mood-label span{
+.mood-label span {
   font-size: 13px;
   font-weight: 600;
   margin-top: 6px;
@@ -278,7 +361,7 @@ main.card{
 }
 
 /* small icon-only active state box for first example (makes the selected feel button-like) */
-.mood-radio:checked + .mood-label { padding: 14px; }
+/* removed empty ruleset and padding shift */
 
 /* -------------------------
    Text area block and toolbar
@@ -310,19 +393,23 @@ main.card{
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--grey-5);
+  color: var(--btn-icon-color);
   transition: background 0.2s ease, color 0.2s ease;
 }
 
 .refresh-button:hover {
-  background: rgba(255,255,255,0.05);
-  color: var(--white);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-header);
 }
 
-.other-input-wrap{ display:none; } /* not present right now — kept for later */
+.other-input-wrap {
+  display: none;
+}
+
+/* not present right now — kept for later */
 
 /* textarea */
-.textarea-wrap{
+.textarea-wrap {
   margin-top: 10px;
   position: relative;
   margin-bottom: 0;
@@ -333,10 +420,10 @@ textarea,
 .rich-text-editor {
   width: 100%;
   min-height: 140px;
-  background: var(--grey-2);
-  color: var(--grey-7);
-  border-radius: 8px 8px 0 0;
-  border: 1px solid rgba(255,255,255,0.04);
+  background: var(--bg-element);
+  color: var(--text-main);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  border: 1px solid var(--border-subtle);
   border-bottom: none;
   padding: 18px;
   font-size: 16px;
@@ -353,26 +440,26 @@ textarea,
 
 .rich-text-editor:empty:before {
   content: attr(data-placeholder);
-  color: var(--grey-4);
+  color: var(--text-muted);
   pointer-events: none;
 }
 
 .rich-text-editor:focus {
-  border-color: rgba(255,255,255,0.08);
+  border-color: var(--border-focus);
   box-shadow: none;
 }
 
 textarea::placeholder {
-  color: var(--grey-4);
+  color: var(--text-muted);
 }
 
-textarea:focus{
-  border-color: rgba(255,255,255,0.08);
+textarea:focus {
+  border-color: var(--border-focus);
   box-shadow: none;
 }
 
 /* toolbar row (icons area) */
-.toolbar{
+.toolbar {
   width: 100%;
   display: flex;
   align-items: center;
@@ -380,20 +467,20 @@ textarea:focus{
   gap: 12px;
   padding: 8px 12px;
   border-radius: 0 0 8px 8px;
-  border: 1px solid rgba(255,255,255,0.04);
-  border-top: 1px solid rgba(255,255,255,0.12);
-  background: var(--grey-2);
+  border: 1px solid var(--border-subtle);
+  border-top: 1px solid var(--border-focus);
+  background: var(--bg-element);
 }
 
 /* icon placeholders */
-.toolbar .tool{
+.toolbar .tool {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 28px;
   height: 28px;
   border-radius: 6px;
-  color: var(--grey-5);
+  color: var(--btn-icon-color);
   cursor: pointer;
   background: none;
   border: none;
@@ -404,13 +491,13 @@ textarea:focus{
 }
 
 .toolbar .tool:hover {
-  color: var(--white);
-  background: rgba(255,255,255,0.05);
+  color: var(--text-header);
+  background: var(--bg-element-hover);
 }
 
 .toolbar .tool.active {
-  color: var(--white);
-  background: rgba(255,255,255,0.1);
+  color: var(--text-header);
+  background: var(--border-focus);
 }
 
 .toolbar .tool svg {
@@ -421,7 +508,7 @@ textarea:focus{
 /* -------------------------
    Form controls area
    ------------------------- */
-.controls{
+.controls {
   display: flex;
   justify-content: flex-end;
   gap: 18px;
@@ -429,7 +516,7 @@ textarea:focus{
   align-items: center;
 }
 
-.controls .reset{
+.controls .reset {
   color: var(--grey-7);
   font-weight: 600;
   cursor: pointer;
@@ -441,24 +528,24 @@ textarea:focus{
 }
 
 .controls .reset:hover {
-  color: var(--white);
+  color: var(--text-header);
 }
 
-.controls .save{
-  background: var(--white);
-  color: var(--black);
+.controls .save {
+  background: var(--text-header);
+  color: var(--bg-body);
   border: none;
   padding: 8px 14px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
-  box-shadow: 0 2px 0 rgba(0,0,0,0.25);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
   transition: background 0.25s ease, transform 0.2s ease;
 }
 
 .controls .save:hover {
-  background: #f2f2f2;
+  background: var(--btn-primary-hover);
   transform: translateY(-1px);
 }
 
@@ -480,58 +567,70 @@ textarea:focus{
 /* -------------------------
    Responsiveness
    ------------------------- */
-@media (max-width: 920px){
-  :root { 
-    --card-width: min(680px, calc(100% - 48px)); 
+@media (max-width: 920px) {
+  :root {
+    --card-width: min(680px, calc(100% - 48px));
   }
-  .mood-label{ 
-    width: calc((100% - 36px) / 5); 
-    min-width: 72px; 
+
+  .mood-label {
+    width: calc((100% - 36px) / 5);
+    min-width: 72px;
   }
 }
 
-@media (max-width: 760px){
-  :root { 
-    --card-width: calc(100% - 48px); 
+@media (max-width: 760px) {
+  :root {
+    --card-width: calc(100% - 48px);
   }
+
   main.card {
     padding: 0 24px;
   }
-  .card > .entry.header{ 
-    width: 100%; 
-    padding: 28px 20px; 
-    margin: 18px 0; 
+
+  .card>.entry.header {
+    width: 100%;
+    padding: 28px 20px;
+    margin: 18px 0;
   }
-  .mood-list{ 
-    flex-wrap: wrap; 
-    justify-content: space-around; 
-    gap: 10px; 
-    padding: 14px; 
+
+  .mood-list {
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 10px;
+    padding: 14px;
   }
-  .mood-label{ 
-    width: calc(50% - 10px); 
-    min-width: 100px; 
+
+  .mood-label {
+    width: calc(50% - 10px);
+    min-width: 100px;
   }
-  textarea, .rich-text-editor{ 
-    min-height: 180px; 
+
+  textarea,
+  .rich-text-editor {
+    min-height: 180px;
   }
+
   .mood-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
+
   .write-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
+
   #Header {
     padding: 20px 24px;
     flex-wrap: wrap;
   }
+
   #Header h1 {
     font-size: 28px;
   }
+
   #Actions {
     gap: 12px;
   }
@@ -541,13 +640,17 @@ textarea:focus{
   :root {
     --card-padding: 20px;
   }
+
   #Header h1 {
     font-size: 24px;
   }
-  .login, .signup {
+
+  .login,
+  .signup {
     font-size: 16px;
     padding: 8px 12px;
   }
+
   .mood-label {
     width: calc(50% - 5px);
     min-width: 80px;
@@ -555,4 +658,24 @@ textarea:focus{
 }
 
 /* small visual polish */
-.mood-label svg path { transition: fill 0.12s ease, stroke 0.12s ease; }
+.mood-label svg path {
+  transition: fill 0.12s ease, stroke 0.12s ease;
+  fill: var(--btn-icon-color);
+}
+
+.mood-label svg[class*="selected"] path,
+.mood-label svg[class*="Selected"] path {
+  fill: var(--text-header);
+}
+
+.mood-radio:checked+.mood-label svg[class*="selected"] path {
+  fill: var(--text-header);
+}
+
+#icon-button svg path {
+  stroke: var(--btn-icon-color);
+}
+
+#icon-button:hover svg path {
+  stroke: var(--text-header);
+}

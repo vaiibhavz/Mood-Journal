@@ -1,11 +1,40 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    const iconButton = document.getElementById('icon-button');
+
+    // Theme logic
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('theme') ||
+        (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+
+    if (savedTheme) {
+        setTheme(savedTheme);
+    }
+
+    if (iconButton) {
+        iconButton.addEventListener('click', function () {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            setTheme(newTheme);
+
+            // Icon rotation animation
+            iconButton.style.transform = 'rotate(360deg)';
+            setTimeout(() => {
+                iconButton.style.transform = '';
+            }, 300);
+        });
+    }
+
     const moodRadios = document.querySelectorAll('.mood-radio');
     const journalText = document.getElementById('journal-text');
     const resetButton = document.querySelector('.controls .reset');
     const saveButton = document.querySelector('.controls .save');
     const refreshButton = document.querySelector('.refresh-button');
 
-    resetButton.addEventListener('click', function() {
+    resetButton.addEventListener('click', function () {
         moodRadios.forEach(radio => {
             radio.checked = false;
         });
@@ -16,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 journalText.innerHTML = '';
             }
         }
-        
+
         if (journalText && journalText.contentEditable === 'true') {
             const toolbarButtons = document.querySelectorAll('.toolbar .tool[data-command]');
             toolbarButtons.forEach(button => {
@@ -25,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    saveButton.addEventListener('click', function() {
+    saveButton.addEventListener('click', function () {
         const selectedMood = document.querySelector('input[name="mood"]:checked');
         let text = '';
         if (journalText) {
@@ -35,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 text = journalText.innerText || journalText.textContent;
             }
         }
-        
+
         if (selectedMood && text.trim()) {
             console.log('Saving entry:', {
                 mood: selectedMood.value,
@@ -47,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    refreshButton.addEventListener('click', function() {
+    refreshButton.addEventListener('click', function () {
         if (journalText) {
             if (journalText.tagName === 'TEXTAREA') {
                 journalText.value = '';
@@ -60,17 +89,17 @@ document.addEventListener('DOMContentLoaded', function() {
     if (journalText && journalText.contentEditable === 'true') {
         const toolbarButtons = document.querySelectorAll('.toolbar .tool[data-command]');
         const listButton = document.querySelector('.toolbar .tool[data-command="insertUnorderedList"]');
-        
+
         function isSelectionInEditor() {
             const selection = window.getSelection();
             if (!selection || selection.rangeCount === 0) {
                 return false;
             }
-            
+
             const range = selection.getRangeAt(0);
             return journalText.contains(range.commonAncestorContainer) || journalText === range.commonAncestorContainer;
         }
-        
+
         function updateButtonStates() {
             if (!isSelectionInEditor() && document.activeElement !== journalText) {
                 toolbarButtons.forEach(button => {
@@ -81,14 +110,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 return;
             }
-            
+
             toolbarButtons.forEach(button => {
                 const command = button.getAttribute('data-command');
-                
+
                 if (command === 'insertUnorderedList') {
                     return;
                 }
-                
+
                 try {
                     if (document.queryCommandState(command)) {
                         button.classList.add('active');
@@ -99,14 +128,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     button.classList.remove('active');
                 }
             });
-            
+
             if (listButton) {
                 try {
                     const selection = window.getSelection();
                     if (selection.rangeCount > 0) {
                         const range = selection.getRangeAt(0);
                         let node = range.commonAncestorContainer;
-                        
+
                         while (node && node !== journalText) {
                             if (node.nodeType === 1) {
                                 if (node.tagName === 'UL' || node.tagName === 'LI') {
@@ -136,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
         journalText.addEventListener('keyup', updateButtonStates);
         journalText.addEventListener('mouseup', updateButtonStates);
         journalText.addEventListener('focus', updateButtonStates);
-        journalText.addEventListener('blur', function() {
+        journalText.addEventListener('blur', function () {
             toolbarButtons.forEach(button => {
                 button.classList.remove('active');
             });
@@ -144,8 +173,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 listButton.classList.remove('active');
             }
         });
-        
-        document.addEventListener('selectionchange', function() {
+
+        document.addEventListener('selectionchange', function () {
             if (isSelectionInEditor() || document.activeElement === journalText) {
                 updateButtonStates();
             } else {
@@ -160,42 +189,42 @@ document.addEventListener('DOMContentLoaded', function() {
 
         toolbarButtons.forEach(button => {
             const command = button.getAttribute('data-command');
-            
+
             if (command === 'insertUnorderedList') {
                 return;
             }
-            
-            button.addEventListener('click', function(e) {
+
+            button.addEventListener('click', function (e) {
                 e.preventDefault();
                 const cmd = this.getAttribute('data-command');
-                
+
                 if (!cmd) return;
-                
+
                 journalText.focus();
-                
+
                 try {
                     document.execCommand(cmd, false, null);
                 } catch (e) {
                     console.error('Command failed:', cmd, e);
                 }
-                
+
                 setTimeout(updateButtonStates, 10);
             });
         });
 
         if (listButton) {
-            listButton.addEventListener('click', function(e) {
+            listButton.addEventListener('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 journalText.focus();
-                
+
                 try {
                     document.execCommand('insertUnorderedList', false, null);
                 } catch (e) {
                     console.error('List command failed:', e);
                 }
-                
+
                 setTimeout(updateButtonStates, 10);
             });
         }
